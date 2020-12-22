@@ -60,11 +60,11 @@ Analisando o código, podemos observar que existem dois pontos onde o processo p
 
 
 ```php
-	<?php 
+<?php 
 
-	if (empty($rawCode)) {
-        return 0.00;
-    }
+  if (empty($rawCode)) {
+      return 0.00;
+  }
 ```
 
 Também temos:
