@@ -135,7 +135,7 @@ Muito melhor para o "debugging" do que um simples valor genérico, não é mesmo
 
 Portanto, vê-se que pequenas atitudes podem ser de grande valia no processo de fazer software. Dentre tantas outras abordagens, pode-se dizer que a Fail Fast é uma das que entrega resultado de forma mais rápida e simples possível. Sem dúvidas vale a pena fazer o uso da técnica ao criar ou dar manutenção em código já existente, com certeza irá facilitar o trabalho além de tornar o produto mais “saudável”.
 
-### Rerências
+### Referências
 
 - [Fail Fast, de Martin Fowler](https://www.martinfowler.com/ieeeSoftware/failFast.pdf) 
 
