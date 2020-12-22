@@ -84,7 +84,7 @@ Prosseguindo no nosso exemplo, após muitas tentativas de reprodução, descobri
 
 
 ```php
-   <?php 
+<?php 
    if (empty($rawCode)) {
       return 0.00;
    }
