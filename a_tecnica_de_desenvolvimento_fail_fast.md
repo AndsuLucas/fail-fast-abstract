@@ -70,11 +70,10 @@ Analisando o código, podemos observar que existem dois pontos onde o processo p
 Também temos:
 
 ```php
-	<?php
-
-    if (!$this->couponHandler->isValidCoupon($parsedCouponCode)) {
-        return 0.00
-    }
+<?php
+   if (!$this->couponHandler->isValidCoupon($parsedCouponCode)) {
+      return 0.00
+   }
 ```
 
 Ao identificar esses pontos, fazemos uma série de testes no "endpoint" a fim de encontrarmos o erro, utilizando o mesmo código de cupom, com o mesmo banco da loja da falha com todos os cenários idênticos ao do problema descrito, mas, mesmo assim, o problema parece não existir, isso é, o cupom é retornado corretamente. Esse é um caso, simplificado por motivos didáticos, é muito comum que pode aumentar significativamente o tempo de resolução dos bugs. Acredito que todos os desenvolvedores, não importa o nível, passaram ou irão passar por uma situação parecida.
@@ -85,11 +84,10 @@ Prosseguindo no nosso exemplo, após muitas tentativas de reprodução, descobri
 
 
 ```php
-	<?php 
-
-	if (empty($rawCode)) {
-        return 0.00;
-    }
+   <?php 
+   if (empty($rawCode)) {
+      return 0.00;
+   }
 ```
 
 Mas até chegarmos ao foco do problema, muitas vezes, despendemos de horas e horas de analise, logs e mais logs e um tempo que poderia trazer mais valor ao usuário.
@@ -98,10 +96,9 @@ A abordagem Fail Fast se encaixaria muito bem nessa situação. Não faz sentido
 
 ```php
 <?php
-
-	if (empty($rawCode)) {
-        throw new \InvalidArgumentException('Falha ao tentar processar cupom com o código vazio', 404).
-    }
+   if (empty($rawCode)) {
+      throw new \InvalidArgumentException('Falha ao tentar processar cupom com o código vazio', 404).
+   }
 ```
 
 Como podemos notar, ao invés de retornar um valor para um cupom com o código vazio, o que fazemos é falhar rápido de forma clara. O que deverá ser mostrado ao usuário e como esse erro será abordado nos fluxos subsequentes é papel de quem está fazendo uso desse techo de código.
@@ -112,11 +109,10 @@ Podemos deixar ainda melhor utilizando um serviço de log, vejamos:
 
 ```php
 <?php
-
-	if (empty($rawCode)) {
-		NRClient::addCustomParameter('EmptyCouponProcessing', /*algo que identifique a sessão vigente*/);
-    	throw new \InvalidArgumentException('Falha ao tentar processar cupom com o código vazio', 404);
-    }
+   if (empty($rawCode)) {
+      NRClient::addCustomParameter('EmptyCouponProcessing', /*algo que identifique a sessão vigente*/);
+      throw new \InvalidArgumentException('Falha ao tentar processar cupom com o código vazio', 404);
+   }
 
 ```
 
@@ -126,11 +122,10 @@ Podemos seguir com a mesma abordagem em outros pontos do método:
 
 ```php
 <?php
-
-	if (!$this->couponHandler->isValidCoupon($parsedCouponCode)) {
-		NRClient::addCustomParameter('InvalidCouponCode', $parsedCouponCode);
-		throw new \InvalidArgumentException("Falha ao tentar processar cupom inválido {$parsedCouponCode}", 404);
-	}
+    if (!$this->couponHandler->isValidCoupon($parsedCouponCode)) {
+       NRClient::addCustomParameter('InvalidCouponCode', $parsedCouponCode);
+       throw new \InvalidArgumentException("Falha ao tentar processar cupom inválido {$parsedCouponCode}", 404);
+    }
 
 ```
 
